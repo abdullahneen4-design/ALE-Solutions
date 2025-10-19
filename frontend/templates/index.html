@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALE Solutions</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">
+        <span class="logo-icon"></span>
+        <h1>ALE <span>Solutions</span></h1>
+      </div>
+      <ul>
+        <li><a href="#services">Våra Tjänster</a></li>
+        <li><a href="#consultation">Boka Konsultation</a></li>
+        <li><a href="#contact">Kontakt</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h2>Vi skapar AI-lösningar för framtiden</h2>
+    <p>Din partner inom AI-baserad kundsupport, automatisering och smarta bokningssystem.</p>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="services">
+    <h2>Våra Tjänster</h2>
+    <div class="service-list">
+      <div class="service">
+        <h3>🤖 AI-baserad kundsupport</h3>
+        <p>Smarta chatbotar som förbättrar kundupplevelsen och minskar arbetsbelastningen.</p>
+      </div>
+      <div class="service">
+        <h3>⚙️ Automatisering av arbetsflöden</h3>
+        <p>Effektivisera processer och frigör tid för det som verkligen betyder något.</p>
+      </div>
+      <div class="service">
+        <h3>📅 AI-baserade bokningssystem</h3>
+        <p>Intelligenta lösningar för bokningar som anpassar sig till dina behov.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Consultation -->
+  <section id="consultation" class="consultation">
+    <h2>Boka en gratis konsultation</h2>
+    <form id="consultation-form">
+      <input type="text" id="name" placeholder="Namn" required>
+      <input type="email" id="email" placeholder="E-post" required>
+      <input type="tel" id="phone" placeholder="Telefonnummer" required>
+      <textarea id="message" placeholder="Berätta om dina behov" required></textarea>
+      <button type="submit">Skicka</button>
+    </form>
+    <p id="consultation-response"></p>
+  </section>
+
+  <!-- Chatbot -->
+  <div class="chatbot-container" id="chatbot">
+    <div class="chat-header">
+      <span>💬 Chatta med oss</span>
+      <button id="close-chat">✖</button>
+    </div>
+    <div id="chat-box"></div>
+    <div class="chat-input">
+      <input type="text" id="user-input" placeholder="Skriv ett meddelande...">
+      <button id="send-btn">➤</button>
+    </div>
+  </div>
+  <button id="chat-toggle">💬</button>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>&copy; 2025 ALE Solutions. Alla rättigheter förbehållna.</p>
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
