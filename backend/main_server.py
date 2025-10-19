@@ -1,52 +1,41 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from dotenv import load_dotenv
 import os
-import openai
+from flask import Flask, request, jsonify, send_from_directory
+from openai import OpenAI
+from dotenv import load_dotenv
 
-# تحميل ملف .env
+# Load environment variables
 load_dotenv()
-
-# مفتاح OpenAI من البيئة
 api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
-    raise ValueError("❌ لم يتم العثور على OPENAI_API_KEY في البيئة")
 
-# تعيين المفتاح للمكتبة
-openai.api_key = api_key
+# Initialize OpenAI client
+client = OpenAI(api_key=api_key)
 
-# تهيئة السيرفر
-app = Flask(__name__)
-CORS(app)
+# Initialize Flask app
+app = Flask(__name__, static_folder="../frontend/static", template_folder="../frontend")
 
+# Serve frontend
 @app.route("/")
-def home():
-    return "🚀 Backend is running!"
+def index():
+    return send_from_directory("../frontend", "index.html")
 
+# Chat endpoint
 @app.route("/chat", methods=["POST"])
 def chat():
-    try:
-        data = request.get_json()
-        message = data.get("message", "")
+    data = request.json
+    message = data.get("message", "")
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": message}]
+    )
+    reply = response.choices[0].message.content
+    return jsonify({"reply": reply})
 
-        if not message:
-            return jsonify({"error": "الرسالة فارغة"}), 400
-
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": message}
-            ]
-        )
-
-        reply = response.choices[0].message["content"]
-        return jsonify({"reply": reply})
-
-    except Exception as e:
-        print("❌ Error:", e)
-        return jsonify({"error": str(e)}), 500
-
+# Consultation form endpoint
+@app.route("/consultation", methods=["POST"])
+def consultation():
+    data = request.json
+    # ممكن هنا تخزن البيانات أو ترسلها بإيميل
+    return jsonify({"reply": "Tack! Vi återkommer snart."})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
