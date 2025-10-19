@@ -1,69 +1,54 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from dotenv import load_dotenv
 from openai import OpenAI
 import os
-from dotenv import load_dotenv
 
-# تحميل متغيرات البيئة
+# 🧪 تحميل المتغيرات من ملف .env
 load_dotenv()
 
-app = Flask(__name__, template_folder="../frontend/templates", static_folder="../frontend/static")
-
+# 🗝️ جلب مفتاح OpenAI من البيئة
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
-    print("❌ OPENAI_API_KEY hittades inte i .env")
+    raise ValueError("❌ لم يتم العثور على متغير OPENAI_API_KEY في البيئة.")
 
+# 🧠 إنشاء العميل
 client = OpenAI(api_key=api_key)
 
-SYSTEM_PROMPT = """
-Du är en AI-assistent för ALE Solutions.
-Dina uppgifter:
-- Du får ENDAST prata om ALE Solutions och dess tjänster.
-- Våra tjänster är:
-  1. AI-baserad kundsupport
-  2. Automatisering av arbetsflöden
-  3. AI-baserade bokningssystem
-- Om en användare frågar om något utanför dessa tjänster, svara:
-  "Tyvärr, jag kan bara hjälpa till med våra tjänster."
-- Var professionell, tydlig och hjälpsam.
-"""
+# 🌐 تهيئة السيرفر
+app = Flask(__name__)
+CORS(app)
 
+# ✅ راوت بسيط للتجربة
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return "🚀 API is running!"
 
+# 💬 راوت للتعامل مع ChatGPT
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json()
-    user_message = data.get("message", "")
-
-    if not user_message:
-        return jsonify({"error": "Ingen meddelande skickat"}), 400
-
     try:
+        data = request.get_json()
+        user_message = data.get("message", "")
+
+        if not user_message:
+            return jsonify({"error": "الرسالة فارغة"}), 400
+
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": user_message}
             ]
         )
-        answer = response.choices[0].message.content
-        return jsonify({"reply": answer})
+
+        reply = response.choices[0].message.content
+        return jsonify({"reply": reply})
+
     except Exception as e:
-        print("❌ Exception:", e)
+        print("❌ Error:", e)
         return jsonify({"error": str(e)}), 500
 
-@app.route("/consultation", methods=["POST"])
-def consultation():
-    data = request.get_json()
-    name = data.get("name")
-    email = data.get("email")
-    phone = data.get("phone")
-    message = data.get("message")
-
-    # في مشروع حقيقي هون ممكن ترسل ايميل أو تحفظ بالـ DB
-    print(f"📩 Ny konsultation: {name}, {email}, {phone}, {message}")
-    return jsonify({"success": True, "reply": "Tack! Vi kontaktar dig snart."})
-
+# 🏃 تشغيل محلي (ليس ضروري على Render)
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(host="0.0.0.0", port=5000)
