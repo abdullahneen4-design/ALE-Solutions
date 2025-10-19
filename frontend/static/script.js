@@ -1,3 +1,4 @@
+// Chatbot toggle
 const chatToggle = document.getElementById("chat-toggle");
 const chatbot = document.getElementById("chatbot");
 const closeChat = document.getElementById("close-chat");
@@ -38,6 +39,7 @@ sendBtn.addEventListener("click", async () => {
   appendMessage("Bot", data.reply);
 });
 
+// Consultation form
 document.getElementById("consultation-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("name").value;
