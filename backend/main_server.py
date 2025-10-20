@@ -1,57 +1,50 @@
 import os
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+import openai
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
 
-# Use the new OpenAI client
-from openai import OpenAI
-client = OpenAI(api_key=api_key)
-
-app = Flask(__name__, static_folder="../frontend/static", template_folder="../frontend/templates")
+app = Flask(__name__, template_folder="../frontend/templates", static_folder="../frontend/static")
 CORS(app)
 
-# Route for the homepage
+# OpenAI API key من البيئة فقط عند الطلب
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+openai.api_key = OPENAI_API_KEY
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
-# Chat endpoint
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.json
-    user_message = data.get("message", "")
+    data = request.get_json()
+    message = data.get("message", "")
+    if not message:
+        return jsonify({"reply": "Ingen meddelande mottaget."})
 
-    # Call OpenAI API
     try:
-        response = client.chat.completions.create(
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": user_message}],
-            max_tokens=150
+            messages=[{"role": "user", "content": message}]
         )
-        reply = response.choices[0].message.content.strip()
+        reply = response.choices[0].message.content
     except Exception as e:
-        reply = f"Error: {str(e)}"
+        reply = "Fel vid anslutning till AI-tjänsten."
 
     return jsonify({"reply": reply})
 
-# Consultation form endpoint
 @app.route("/consultation", methods=["POST"])
 def consultation():
-    data = request.json
-    name = data.get("name", "")
-    email = data.get("email", "")
-    phone = data.get("phone", "")
-    message = data.get("message", "")
-
-    # هنا ممكن تحط منطق حفظ البيانات أو إرسال إيميل
-    reply = f"Tack {name}! Vi har mottagit ditt meddelande."
-
-    return jsonify({"reply": reply})
+    data = request.get_json()
+    name = data.get("name")
+    email = data.get("email")
+    phone = data.get("phone")
+    message = data.get("message")
+    # هنا ممكن تضيف تخزين أو إرسال ايميل
+    return jsonify({"reply": f"Tack {name}, vi kontaktar dig snart!"})
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port)
