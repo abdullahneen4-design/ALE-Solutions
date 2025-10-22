@@ -26,9 +26,13 @@ def chat():
         return jsonify({"reply": "⚠️ Ingen text skickades."})
 
     try:
+        # نضيف رسالة system لتخصيص البوت للشركة فقط
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": message}]
+            messages=[
+                {"role": "system", "content": "Du är en företagsbot för ALE Solutions. Svara endast med information om företaget och dess tjänster."},
+                {"role": "user", "content": message}
+            ]
         )
         reply = response.choices[0].message["content"]
         return jsonify({"reply": reply})
