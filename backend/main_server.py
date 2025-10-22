@@ -30,7 +30,7 @@ def chat():
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Du är en företagsbot för ALE Solutions. Svara endast med information om företaget och dess tjänster."},
+                {"role": "system", "content": "Du är en företagsbot för NEEN Solutions. Svara endast med information om företaget och dess tjänster."},
                 {"role": "user", "content": message}
             ]
         )
