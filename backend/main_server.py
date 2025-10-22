@@ -1,20 +1,25 @@
 import os
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
-from openai import OpenAI
 
-# تحديد المسارات للمجلدات
+# نحاول استيراد النسخة الحديثة أولاً، وإن فشلت نستخدم الطريقة القديمة
+try:
+    from openai import OpenAI
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    use_new_api = True
+except ImportError:
+    import openai
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    client = openai
+    use_new_api = False
+
+# إعداد Flask
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_DIR = os.path.join(BASE_DIR, "../templates")
 STATIC_DIR = os.path.join(BASE_DIR, "../frontend/static")
 
-# إعداد تطبيق Flask
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 CORS(app)
-
-# مفتاح OpenAI من المتغيرات البيئية
-api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=api_key)
 
 @app.route("/")
 def home():
@@ -28,26 +33,39 @@ def chat():
     if not message:
         return jsonify({"reply": "⚠️ Ingen text skickades."})
 
+    system_prompt = (
+        "Du är ALE Solutions' AI-assistent. "
+        "Du representerar företaget och svarar alltid professionellt på svenska. "
+        "ALE Solutions erbjuder AI-baserade lösningar, automation och smarta bokningssystem. "
+        "När användaren ställer frågor ska du presentera företagets tjänster, hur ni kan hjälpa till, "
+        "och ge ett trevligt, kortfattat svar i marknadsföringsstil. "
+        "Undvik att prata om ämnen utanför företaget."
+    )
+
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "Du är ALE Solutions' AI-assistent. "
-                        "Du representerar företaget och svarar alltid professionellt på svenska. "
-                        "ALE Solutions erbjuder AI-baserade lösningar, automation och smarta bokningssystem. "
-                        "När användaren ställer frågor ska du presentera företagets tjänster, hur ni kan hjälpa till, "
-                        "och ge ett trevligt, kortfattat svar i marknadsföringsstil. "
-                        "Undvik att prata om ämnen utanför företaget."
-                    ),
-                },
-                {"role": "user", "content": message},
-            ]
-        )
-        reply = response.choices[0].message.content
+        if use_new_api:
+            # النسخة الحديثة من مكتبة OpenAI
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": message},
+                ]
+            )
+            reply = response.choices[0].message.content
+        else:
+            # النسخة القديمة من مكتبة OpenAI
+            response = client.ChatCompletion.create(
+                model="gpt-4-turbo",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": message},
+                ]
+            )
+            reply = response["choices"][0]["message"]["content"]
+
         return jsonify({"reply": reply})
+
     except Exception as e:
         return jsonify({"reply": f"Fel vid anslutning till AI-tjänsten: {str(e)}"})
 
