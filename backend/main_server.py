@@ -1,44 +1,60 @@
 import os
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
-import openai
+from openai import OpenAI
 
-# المسارات للمجلدات
+# تحديد المسارات بشكل ثابت وواضح
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TEMPLATE_DIR = os.path.join(BASE_DIR, "../templates")
+TEMPLATE_DIR = os.path.join(BASE_DIR, "../frontend/templates")
 STATIC_DIR = os.path.join(BASE_DIR, "../frontend/static")
 
-# إنشاء تطبيق Flask مع تحديد مسارات القوالب والستاتيك
+# إعداد Flask
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 CORS(app)
 
-# مفتاح OpenAI من المتغيرات البيئية
+# تهيئة عميل OpenAI
 api_key = os.getenv("OPENAI_API_KEY")
-client = openai.OpenAI(api_key=api_key)
+client = OpenAI(api_key=api_key)
 
+# الصفحة الرئيسية
 @app.route("/")
 def home():
     return render_template("index.html")
 
-@app.route("/ask", methods=["POST"])
-def ask():
+# مسار البوت (لتوافق مع JavaScript الحالي)
+@app.route("/chat", methods=["POST"])
+def chat():
     data = request.get_json()
-    question = data.get("question")
+    message = data.get("message", "")
     
-    if not question:
-        return jsonify({"error": "No question provided"}), 400
-
+    if not message:
+        return jsonify({"reply": "⚠️ Ingen text skickades."})
+    
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[{"role": "user", "content": question}]
+            messages=[{"role": "user", "content": message}]
         )
-        answer = response.choices[0].message.content
-        return jsonify({"answer": answer})
+        reply = response.choices[0].message.content
+        return jsonify({"reply": reply})
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"reply": f"Fel vid anslutning till AI-tjänsten: {str(e)}"})
+
+# نموذج الاستشارة (form)
+@app.route("/consultation", methods=["POST"])
+def consultation():
+    data = request.get_json()
+    name = data.get("name")
+    email = data.get("email")
+    phone = data.get("phone")
+    message = data.get("message")
+
+    if not all([name, email, phone, message]):
+        return jsonify({"reply": "⚠️ Vänligen fyll i alla fält."})
+
+    # رسالة افتراضية بعد إرسال الاستشارة
+    return jsonify({"reply": f"Tack {name}! Vi kontaktar dig snart på {email}."})
 
 if __name__ == "__main__":
-    # على Render يجب استخدام port من env
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
