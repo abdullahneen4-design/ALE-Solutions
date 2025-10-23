@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,68 +8,66 @@
 </head>
 <body>
     <header>
-        <div class="logo">
-            <span class="neon">N</span>EEN Solutions
-        </div>
-        <nav>
-            <a href="#services">Services</a>
-            <a href="#chat">Chat Bot</a>
-            <a href="#consultation">Consultation</a>
-        </nav>
+        <h1>NEEN Solutions</h1>
+        <p>Automatiserade AI-lösningar för startups och småföretag</p>
     </header>
 
-    <section class="hero">
-        <h1>Smart Solutions for Startups & Small Businesses</h1>
-        <p>AI-powered websites, chatbots, and automation tools.</p>
+    <section id="chat-section">
+        <h2>AI-chatt</h2>
+        <div id="chat-box"></div>
+        <input type="text" id="user-message" placeholder="Skriv ditt meddelande här...">
+        <button id="send-btn">Skicka</button>
     </section>
 
-    <section id="services" class="services">
-        <h2>Our Services</h2>
-        <div class="cards">
-            <div class="card">
-                <h3>AI Websites</h3>
-                <p>Custom websites with AI-powered chatbots built for startups and small businesses.</p>
-            </div>
-            <div class="card">
-                <h3>Chat Bots</h3>
-                <p>Standalone AI chatbots to automate customer interactions efficiently.</p>
-            </div>
-            <div class="card">
-                <h3>AI Automation</h3>
-                <p>Smart automation for bookings, scheduling, and business workflows.</p>
-            </div>
-            <div class="card">
-                <h3>AI Discovery</h3>
-                <p>Innovative AI services for untapped opportunities and niche solutions.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="chat" class="chatbot">
-        <h2>Talk to Our AI Bot</h2>
-        <div class="chat-container">
-            <div id="chat-box"></div>
-            <input type="text" id="user-input" placeholder="Write your message...">
-            <button id="send-btn">Send</button>
-        </div>
-    </section>
-
-    <section id="consultation" class="consultation">
-        <h2>Request Consultation</h2>
-        <form id="consult-form">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="text" name="phone" placeholder="Phone" required>
-            <textarea name="message" placeholder="Message" required></textarea>
-            <button type="submit">Submit</button>
+    <section id="consultation-section">
+        <h2>Boka konsultation</h2>
+        <form id="consultation-form">
+            <input type="text" name="name" placeholder="Namn" required>
+            <input type="email" name="email" placeholder="E-post" required>
+            <input type="tel" name="phone" placeholder="Telefon" required>
+            <textarea name="message" placeholder="Ditt meddelande" required></textarea>
+            <button type="submit">Skicka</button>
         </form>
-        <div id="consult-reply"></div>
+        <div id="consultation-response"></div>
     </section>
 
-    <footer>
-        <p>&copy; 2025 NEEN Solutions. All rights reserved.</p>
-    </footer>
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userMessage = document.getElementById('user-message');
+        const sendBtn = document.getElementById('send-btn');
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+        sendBtn.addEventListener('click', async () => {
+            const message = userMessage.value;
+            if (!message) return;
+            
+            chatBox.innerHTML += `<p><strong>Du:</strong> ${message}</p>`;
+            userMessage.value = '';
+
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message})
+            });
+            const data = await response.json();
+            chatBox.innerHTML += `<p><strong>AI:</strong> ${data.reply}</p>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        const consultationForm = document.getElementById('consultation-form');
+        const consultationResponse = document.getElementById('consultation-response');
+
+        consultationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = Object.fromEntries(new FormData(consultationForm));
+            const response = await fetch('/consultation', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(formData)
+            });
+            const data = await response.json();
+            consultationResponse.textContent = data.reply;
+            consultationForm.reset();
+        });
+    </script>
 </body>
 </html>
