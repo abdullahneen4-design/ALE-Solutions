@@ -3,13 +3,20 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import openai
 
+# مسارات الـ templates و static
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_DIR = os.path.join(BASE_DIR, "../frontend/templates")
 STATIC_DIR = os.path.join(BASE_DIR, "../frontend/static")
 
-app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
+app = Flask(
+    __name__, 
+    template_folder=TEMPLATE_DIR, 
+    static_folder=STATIC_DIR,
+    static_url_path="/static"  # مهم جداً
+)
 CORS(app)
 
+# مفتاح OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route("/")
