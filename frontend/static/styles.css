@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background-color: #0d0d0d;
+    background-color: #121212;
     color: #e0e0e0;
 }
 
@@ -9,21 +9,21 @@ header {
     display: flex;
     align-items: center;
     padding: 20px;
-    background-color: #111;
-    border-bottom: 2px solid #39ff14;
+    background-color: #1f1f1f;
+    border-bottom: 2px solid #00fff7;
 }
 
 .logo {
     font-size: 2rem;
     font-weight: bold;
-    color: #39ff14;
+    color: #00fff7;
     margin-right: 15px;
 }
 
 h1 { font-size: 1.8rem; }
 
 .hero { text-align: center; padding: 60px 20px; }
-.hero h2 { font-size: 2rem; color: #39ff14; }
+.hero h2 { font-size: 2rem; color: #00fff7; }
 .hero p { font-size: 1.1rem; color: #ccc; }
 
 .chatbot, .consultation {
@@ -31,36 +31,89 @@ h1 { font-size: 1.8rem; }
     margin: 30px auto;
     padding: 20px;
     max-width: 600px;
-    border-radius: 10px;
-    border: 1px solid #39ff14;
+    border-radius: 12px;
+    border: 1px solid #00fff7;
 }
 
-textarea, input {
+#chatWindow {
+    height: 300px;
+    overflow-y: auto;
+    background-color: #0d0d0d;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #00fff7;
+    background-color: #121212;
+    color: #fff;
+}
+
+.chat-input button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #00fff7;
+    color: #121212;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.chat-input button:hover { background-color: #00d9c0; }
+
+.message {
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    word-wrap: break-word;
+}
+
+.user-msg {
+    align-self: flex-end;
+    background-color: #00fff7;
+    color: #121212;
+}
+
+.ai-msg {
+    align-self: flex-start;
+    background-color: #222;
+    color: #fff;
+}
+
+textarea, input[type="text"], input[type="email"] {
     width: 100%;
     padding: 10px;
     margin: 8px 0;
-    background-color: #0d0d0d;
-    border: 1px solid #39ff14;
+    background-color: #121212;
+    border: 1px solid #00fff7;
     color: #e0e0e0;
     border-radius: 5px;
 }
 
-button {
-    background-color: #39ff14;
-    color: #0d0d0d;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: bold;
+button.consult-btn {
+    background-color: #00fff7;
+    color: #121212;
     border-radius: 5px;
-    transition: 0.3s;
 }
 
-button:hover { background-color: #32cc12; }
+button.consult-btn:hover { background-color: #00d9c0; }
 
 footer {
     text-align: center;
     padding: 15px;
-    background-color: #111;
-    border-top: 2px solid #39ff14;
+    background-color: #1f1f1f;
+    border-top: 2px solid #00fff7;
 }
