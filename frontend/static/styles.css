@@ -1,4 +1,3 @@
-/* خلفية داكنة + ألوان نيوني */
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
@@ -11,34 +10,21 @@ header {
     align-items: center;
     padding: 20px;
     background-color: #111;
-    border-bottom: 2px solid #39ff14; /* خط نيوني */
+    border-bottom: 2px solid #39ff14;
 }
 
 .logo {
     font-size: 2rem;
     font-weight: bold;
-    color: #39ff14; /* نيوني */
+    color: #39ff14;
     margin-right: 15px;
 }
 
-h1 {
-    font-size: 1.8rem;
-}
+h1 { font-size: 1.8rem; }
 
-.hero {
-    text-align: center;
-    padding: 60px 20px;
-}
-
-.hero h2 {
-    font-size: 2rem;
-    color: #39ff14;
-}
-
-.hero p {
-    font-size: 1.1rem;
-    color: #ccc;
-}
+.hero { text-align: center; padding: 60px 20px; }
+.hero h2 { font-size: 2rem; color: #39ff14; }
+.hero p { font-size: 1.1rem; color: #ccc; }
 
 .chatbot, .consultation {
     background-color: #1a1a1a;
@@ -70,9 +56,7 @@ button {
     transition: 0.3s;
 }
 
-button:hover {
-    background-color: #32cc12;
-}
+button:hover { background-color: #32cc12; }
 
 footer {
     text-align: center;
