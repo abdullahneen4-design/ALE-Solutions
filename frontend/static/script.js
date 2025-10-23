@@ -1,10 +1,16 @@
-// Chatbot
-document.getElementById("sendBtn").addEventListener("click", async () => {
-    const message = document.getElementById("userMessage").value;
-    const chatResponse = document.getElementById("chatResponse");
+const chatWindow = document.getElementById("chatWindow");
+const sendBtn = document.getElementById("sendBtn");
+
+sendBtn.addEventListener("click", async () => {
+    const input = document.getElementById("userMessage");
+    const message = input.value.trim();
     if (!message) return;
 
-    chatResponse.innerText = "⏳ Väntar på AI...";
+    addMessage("user", message);
+    input.value = "";
+    
+    addMessage("ai", "⏳ Väntar på AI...");
+
     try {
         const res = await fetch("/chat", {
             method: "POST",
@@ -12,19 +18,37 @@ document.getElementById("sendBtn").addEventListener("click", async () => {
             body: JSON.stringify({ message })
         });
         const data = await res.json();
-        chatResponse.innerText = data.reply;
+        updateLastAIMessage(data.reply);
     } catch {
-        chatResponse.innerText = "❌ Fel med servern.";
+        updateLastAIMessage("❌ Fel med servern.");
     }
 });
 
+function addMessage(sender, text) {
+    const msg = document.createElement("div");
+    msg.classList.add("message");
+    msg.classList.add(sender === "user" ? "user-msg" : "ai-msg");
+    msg.innerText = text;
+    chatWindow.appendChild(msg);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function updateLastAIMessage(text) {
+    const aiMessages = chatWindow.querySelectorAll(".ai-msg");
+    if (aiMessages.length) {
+        aiMessages[aiMessages.length - 1].innerText = text;
+    }
+}
+
 // Consultation
-document.getElementById("consultBtn").addEventListener("click", async () => {
+const consultBtn = document.getElementById("consultBtn");
+const consultResponse = document.getElementById("consultResponse");
+
+consultBtn.addEventListener("click", async () => {
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const phone = document.getElementById("phone").value;
     const message = document.getElementById("message").value;
-    const consultResponse = document.getElementById("consultResponse");
 
     consultResponse.innerText = "⏳ Skickar meddelande...";
     try {
