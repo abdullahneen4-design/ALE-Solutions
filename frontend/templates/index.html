@@ -2,72 +2,43 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEEN Solutions</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Neen Solutions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
-        <h1>NEEN Solutions</h1>
-        <p>Automatiserade AI-lösningar för startups och småföretag</p>
+        <div class="logo">🟦 N</div>
+        <h1>Neen Solutions</h1>
     </header>
 
-    <section id="chat-section">
-        <h2>AI-chatt</h2>
-        <div id="chat-box"></div>
-        <input type="text" id="user-message" placeholder="Skriv ditt meddelande här...">
-        <button id="send-btn">Skicka</button>
-    </section>
+    <main>
+        <section class="hero">
+            <h2>Smarta AI-lösningar för startups och småföretag</h2>
+            <p>Bygg webbplatser, AI-chatbotar och automatiserade system på ett enkelt sätt.</p>
+        </section>
 
-    <section id="consultation-section">
-        <h2>Boka konsultation</h2>
-        <form id="consultation-form">
-            <input type="text" name="name" placeholder="Namn" required>
-            <input type="email" name="email" placeholder="E-post" required>
-            <input type="tel" name="phone" placeholder="Telefon" required>
-            <textarea name="message" placeholder="Ditt meddelande" required></textarea>
-            <button type="submit">Skicka</button>
-        </form>
-        <div id="consultation-response"></div>
-    </section>
+        <section class="chatbot">
+            <h3>Prata med vår AI</h3>
+            <textarea id="userMessage" placeholder="Skriv ditt meddelande här..."></textarea>
+            <button id="sendBtn">Skicka</button>
+            <div id="chatResponse"></div>
+        </section>
 
-    <script>
-        const chatBox = document.getElementById('chat-box');
-        const userMessage = document.getElementById('user-message');
-        const sendBtn = document.getElementById('send-btn');
+        <section class="consultation">
+            <h3>Boka en konsultation</h3>
+            <input type="text" id="name" placeholder="Namn">
+            <input type="email" id="email" placeholder="Email">
+            <input type="text" id="phone" placeholder="Telefon">
+            <textarea id="message" placeholder="Meddelande"></textarea>
+            <button id="consultBtn">Skicka</button>
+            <div id="consultResponse"></div>
+        </section>
+    </main>
 
-        sendBtn.addEventListener('click', async () => {
-            const message = userMessage.value;
-            if (!message) return;
-            
-            chatBox.innerHTML += `<p><strong>Du:</strong> ${message}</p>`;
-            userMessage.value = '';
+    <footer>
+        <p>© 2025 Neen Solutions | AI-driven automation</p>
+    </footer>
 
-            const response = await fetch('/chat', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message})
-            });
-            const data = await response.json();
-            chatBox.innerHTML += `<p><strong>AI:</strong> ${data.reply}</p>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
-        });
-
-        const consultationForm = document.getElementById('consultation-form');
-        const consultationResponse = document.getElementById('consultation-response');
-
-        consultationForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = Object.fromEntries(new FormData(consultationForm));
-            const response = await fetch('/consultation', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(formData)
-            });
-            const data = await response.json();
-            consultationResponse.textContent = data.reply;
-            consultationForm.reset();
-        });
-    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
