@@ -1,45 +1,44 @@
-// Chatbot
-const sendBtn = document.getElementById("sendBtn");
-const chatResponse = document.getElementById("chatResponse");
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Neen Solutions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">🟦 N</div>
+        <h1>Neen Solutions</h1>
+    </header>
 
-sendBtn.addEventListener("click", async () => {
-    const message = document.getElementById("userMessage").value;
-    if (!message) return;
+    <main>
+        <section class="hero">
+            <h2>Smarta AI-lösningar för startups och småföretag</h2>
+            <p>Bygg webbplatser, AI-chatbotar och automatiserade system på ett enkelt sätt.</p>
+        </section>
 
-    chatResponse.innerText = "⏳ Väntar på AI...";
-    try {
-        const res = await fetch("/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message })
-        });
-        const data = await res.json();
-        chatResponse.innerText = data.reply;
-    } catch (err) {
-        chatResponse.innerText = "❌ Fel med servern.";
-    }
-});
+        <section class="chatbot">
+            <h3>Prata med vår AI</h3>
+            <textarea id="userMessage" placeholder="Skriv ditt meddelande här..."></textarea>
+            <button id="sendBtn">Skicka</button>
+            <div id="chatResponse"></div>
+        </section>
 
-// Consultation
-const consultBtn = document.getElementById("consultBtn");
-const consultResponse = document.getElementById("consultResponse");
+        <section class="consultation">
+            <h3>Boka en konsultation</h3>
+            <input type="text" id="name" placeholder="Namn">
+            <input type="email" id="email" placeholder="Email">
+            <input type="text" id="phone" placeholder="Telefon">
+            <textarea id="message" placeholder="Meddelande"></textarea>
+            <button id="consultBtn">Skicka</button>
+            <div id="consultResponse"></div>
+        </section>
+    </main>
 
-consultBtn.addEventListener("click", async () => {
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-    const message = document.getElementById("message").value;
+    <footer>
+        <p>© 2025 Neen Solutions | AI-driven automation</p>
+    </footer>
 
-    consultResponse.innerText = "⏳ Skickar meddelande...";
-    try {
-        const res = await fetch("/consultation", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, phone, message })
-        });
-        const data = await res.json();
-        consultResponse.innerText = data.reply;
-    } catch (err) {
-        consultResponse.innerText = "❌ Fel med servern.";
-    }
-});
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
