@@ -1,77 +1,75 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEEN Solutions</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEEN Solutions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <nav>
-      <div class="logo">
-        <h1>NEEN <span>Solutions</span></h1>
-      </div>
-      <ul>
-        <li><a href="#services">Våra Tjänster</a></li>
-        <li><a href="#consultation">Boka Konsultation</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+        <div class="logo">
+            <span class="neon">N</span>EEN Solutions
+        </div>
+        <nav>
+            <a href="#services">Services</a>
+            <a href="#chat">Chat Bot</a>
+            <a href="#consultation">Consultation</a>
+        </nav>
+    </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <h2>Vi skapar AI-lösningar för framtiden</h2>
-    <p>Din partner inom AI-baserad kundsupport och smarta bokningssystem.</p>
-  </section>
+    <section class="hero">
+        <h1>Smart Solutions for Startups & Small Businesses</h1>
+        <p>AI-powered websites, chatbots, and automation tools.</p>
+    </section>
 
-  <!-- Services -->
-  <section id="services" class="services">
-    <h2>Våra Tjänster</h2>
-    <div class="service-list">
-      <div class="service">
-        <h3>🤖 AI-baserad kundsupport</h3>
-        <p>Smarta chatbotar som förbättrar kundupplevelsen.</p>
-      </div>
-      <div class="service">
-        <h3>⚙️ Automatisering av arbetsflöden</h3>
-        <p>Effektivisera processer och frigör tid.</p>
-      </div>
-      <div class="service">
-        <h3>📅 AI-baserade bokningssystem</h3>
-        <p>Intelligenta lösningar för bokningar.</p>
-      </div>
-    </div>
-  </section>
+    <section id="services" class="services">
+        <h2>Our Services</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>AI Websites</h3>
+                <p>Custom websites with AI-powered chatbots built for startups and small businesses.</p>
+            </div>
+            <div class="card">
+                <h3>Chat Bots</h3>
+                <p>Standalone AI chatbots to automate customer interactions efficiently.</p>
+            </div>
+            <div class="card">
+                <h3>AI Automation</h3>
+                <p>Smart automation for bookings, scheduling, and business workflows.</p>
+            </div>
+            <div class="card">
+                <h3>AI Discovery</h3>
+                <p>Innovative AI services for untapped opportunities and niche solutions.</p>
+            </div>
+        </div>
+    </section>
 
-  <!-- Consultation -->
-  <section id="consultation" class="consultation">
-    <h2>Boka en gratis konsultation</h2>
-    <form id="consultation-form">
-      <input type="text" id="name" placeholder="Namn" required>
-      <input type="email" id="email" placeholder="E-post" required>
-      <input type="tel" id="phone" placeholder="Telefonnummer" required>
-      <textarea id="message" placeholder="Berätta om dina behov" required></textarea>
-      <button type="submit">Skicka</button>
-    </form>
-    <p id="consultation-response"></p>
-  </section>
+    <section id="chat" class="chatbot">
+        <h2>Talk to Our AI Bot</h2>
+        <div class="chat-container">
+            <div id="chat-box"></div>
+            <input type="text" id="user-input" placeholder="Write your message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </section>
 
-  <!-- Chatbot -->
-  <div class="chatbot-container" id="chatbot">
-    <div class="chat-header">
-      <span>💬 Chatta med oss</span>
-      <button id="close-chat">✖</button>
-    </div>
-    <div id="chat-box"></div>
-    <div class="chat-input">
-      <input type="text" id="user-input" placeholder="Skriv ett meddelande...">
-      <button id="send-btn">➤</button>
-    </div>
-  </div>
-  <button id="chat-toggle">💬</button>
+    <section id="consultation" class="consultation">
+        <h2>Request Consultation</h2>
+        <form id="consult-form">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="phone" placeholder="Phone" required>
+            <textarea name="message" placeholder="Message" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="consult-reply"></div>
+    </section>
 
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <footer>
+        <p>&copy; 2025 NEEN Solutions. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
