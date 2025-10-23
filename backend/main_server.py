@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import openai
 
-# إعداد Flask
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_DIR = os.path.join(BASE_DIR, "../frontend/templates")
 STATIC_DIR = os.path.join(BASE_DIR, "../frontend/static")
@@ -11,7 +10,6 @@ STATIC_DIR = os.path.join(BASE_DIR, "../frontend/static")
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 CORS(app)
 
-# إعداد مفتاح OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route("/")
@@ -26,13 +24,9 @@ def chat():
         return jsonify({"reply": "⚠️ Ingen text skickades."})
 
     try:
-        # نضيف رسالة system لتخصيص البوت للشركة فقط
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "Du är en företagsbot för NEEN Solutions. Svara endast med information om företaget och dess tjänster."},
-                {"role": "user", "content": message}
-            ]
+            messages=[{"role": "user", "content": message}]
         )
         reply = response.choices[0].message["content"]
         return jsonify({"reply": reply})
